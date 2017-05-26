@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+<head>
+	<meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<title>{% block title %}个人信息- 慕学在线网{% endblock %}</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/reset.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'js/plugins/queryCity/css/cityLayout.css' %}">
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'css/lq.datetimepick.css' %}"/>
+    {% block custom_css %}{% endblock %}
+
+
+
+    <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
+
+</head>
+<body>
+<meta charset="UTF-8">
+<section class="headerwrap ">
+    <header>
+		<div  class=" header">
+ 			 {% if request.user.is_authenticated %}
+                <div class="top">
+				  <div class="wp">
+					<div class="fl"><p>服务电话：<b>666666666</b></p></div>
+					<!--登录后跳转-->
+                     <div class="personal">
+                            <dl class="user fr">
+                                <dd>{{ request.user.username }}<img class="down fr" src="{% static 'images/top_down.png' %}"/></dd>
+                                <dt><img width="20" height="20" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+                            </dl>
+                            <div class="userdetail">
+                            	<dl>
+	                                <dt><img width="80" height="80" src="{{ MEDIA_URL }}{{ request.user.image }}"/></dt>
+	                                <dd>
+	                                    <h2>Welcome</h2>
+                                        <h1><p>{{ request.user.username }}</p></h1>
+	                                </dd>
+                                </dl>
+                                <div class="btn">
+	                                <a class="personcenter fl" href="{% url 'users:userinfo' %}">进入个人中心</a>
+	                                <a class="fr" href="{% url 'users:logout' %}">退出</a>
+                                </div>
+                            </div>
+                     </div>
+				  </div>
+			    </div>
+            {% else %}
+
+               <div class="top">
+				        <div class="wp">
+                          <div class="fl"><p>服务电话：<b>666666666</b></p></div>
+                              <a style="color:white" class="fr registerbtn" href="{% url 'users:register' %}">注册</a>
+                              <a style="color:white" class="fr loginbtn" href="{% url 'users:login' %}">登录</a>
+                        </div>
+                </div>
+            {% endif %}
+
+            <div class="middle">
+                <div class="wp">
+                    <a href="{% url 'index' %}"><img class="fl" src="{% static 'images/logo.jpg' %}"/></a>
+                    <div class="searchbox fr">
+                        <div class="selectContainer fl">
+                            <span class="selectOption" id="jsSelectOption" data-value="course">
+                                公开课
+                            </span>
+                            <ul class="selectMenu" id="jsSelectMenu">
+                                <li data-value="course">公开课</li>
+                                <li data-value="org">课程机构</li>
+                                <li data-value="teacher">授课老师</li>
+                            </ul>
+                        </div>
+                        <input id="search_keywords" class="fl" type="text" value="" placeholder="请输入搜索内容"/>
+                        <img class="search_btn fr" id="jsSearchBtn" src="{% static 'images/search_btn.png' %}"/>
+                    </div>
+                </div>
+            </div>
+
+
+            {% block active_title %}
+			    <nav>
+				<div class="nav">
+					<div class="wp">
+						<ul>
+							<li {% if request.path == '/' %}class="active"{% endif %}><a href="{% url 'index' %}">首页</a></li>
+							<li {% ifequal request.path|slice:'7' '/course' %}class="active" {% endifequal %}><a href="{% url 'course:course_list' %}">公开课<img class="hot" src="{% static 'images/nav_hot.png' %}"></a></li>
+							<li {% ifequal request.path|slice:'13' 'teacher_list' %}class="active" {% endifequal %}><a href="{% url 'teacher_list' %}">授课教师</a></li>
+							<li {% ifequal request.path|slice:'4' '/org' %}class="active" {% endifequal %}><a href="{% url 'org:org_list' %}">授课机构</a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+            {% endblock %}
+
+			</div>
+    </header>
+</section>
+
+
+
+<!--crumbs start-->
+    <section style="margin-top: 40px;">
+        <div class="wp">
+            <ul  class="crumbs">
+               {% block custom_bread %}
+                  <li><a href="{% url 'index' %}">首页</a>></li>
+               {% endblock %}
+            </ul>
+        </div>
+    </section>
+
+
+<section>
+	<div class="wp list personal_list">
+        {% block left_content %}{% endblock %}
+
+        {% block rightcontent %}{% endblock %}
+
+
+	</div>
+</section>
+
+
+<!--sidebar start-->
+{% block othercontent %}{% endblock %}
+
+<script src="{% static 'jsselectUi.js' %}/" type='text/javascript'></script>
+<script type="text/javascript" src="{% static 'js/plugins/laydate/laydate.js' %}"></script>
+<script src="{% static 'js/plugins/layer/layer.js' %}"></script>
+<script src="{% static 'js/plugins/queryCity/js/public.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/unslider.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/plugins/jquery.scrollLoading.js' %}/plugins/jquery.scrollLoading.js"  type="text/javascript"></script>
+<script src="{% static 'js/validateDialog.js' %}"  type="text/javascript"></script>
+<script src="{% static 'js/deco-common.js' %}"  type="text/javascript"></script>
+
+<script src='{% static 'js/plugins/jquery.upload.js' %}' type='text/javascript'></script>
+<script src="{% static 'js/validate.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/deco-user.js' %}"></script>
+{% block custom_js %}{% endblock %}
+</body>
+</html>
