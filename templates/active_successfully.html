@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <title>邮件发送成功</title>
+</head>
+<body>
+<p>您好，邮件发送成功！</p>
+<div>
+    <p>
+        您可以去邮箱点击激活链接后登录，也可以在激活后，点击<a  href="{% url 'login' %}">这里</a>进行登录。
+    </p>
+</div>
+</body>
+</html>

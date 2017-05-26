@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta charset="UTF-8">
+    <title>邮件发送成功</title>
+</head>
+<body>
+<div class="dialog" id="jsDialog">
+    <div class="successbox dialogbox" id="jsSuccessTips">
+        <h1>成功提交</h1>
+    </div>
+        <h1>邮件验证提示</h1>
+        <div class="close jsCloseDialog"><img src="{% static 'images/dig_close.png' %}"/></div>
+        <div class="center">
+            <img src="{% static 'images/send.png' %}"/>
+            <p>我们已经向您的邮箱<span class="green" id="jsEmailToActive">{{ forgetpwd_form.email.value }}</span>发送了邮件，为保证您的账号安全，请及时验证邮箱。</p>
+            <p >如果您没收到，您可以查看您的垃圾邮件和被过滤邮件，也可以在60秒后再次申请发送验证邮件。</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>
