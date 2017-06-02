@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.db import models
-
+from django.utils.safestring import mark_safe
 
 class CityDict(models.Model):
     name = models.CharField(max_length=8, verbose_name="城市名")
@@ -27,6 +27,7 @@ class CourseOrg(models.Model):
     phone_num = models.CharField(max_length=16, verbose_name="联系方式")
     image = models.ImageField(upload_to="organization/%Y/%m", default="organization/mooc.jpg", max_length=128, verbose_name="Logo")
     students = models.IntegerField(default=0, verbose_name="学习人数")
+    tag = models.CharField(max_length=10, verbose_name="机构标签", null=True, blank=True)
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     def __str__(self):
@@ -35,10 +36,15 @@ class CourseOrg(models.Model):
     # 得到这个培训机构总的课程的数量
     def get_course_nums(self):
         return self.course_set.all().count()
+    get_course_nums.short_description = "课程数目"
 
     # 得到某个培训机构的讲师的数量
     def get_teacher_nums(self):
         return self.teacher_set.all().count()
+
+    def go_to(self):
+        return mark_safe('<a href="https://dee-wang.github.io/">跳转</a>')
+    go_to.short_description = "跳转"
 
     class Meta:
         verbose_name = "课程机构"

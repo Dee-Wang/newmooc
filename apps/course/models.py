@@ -2,15 +2,22 @@ from datetime import datetime
 
 from django.db import models
 
+from DjangoUeditor.models import UEditorField
+
 from organization.models import CourseOrg, Teacher
 
+
+# 课程数据表
 class Course(models.Model):
     course_org = models.ForeignKey(CourseOrg, verbose_name="所属机构", null=True, blank=True)
     teacher = models.ForeignKey(Teacher, verbose_name="授课讲师", null=True, blank=True)
     course_category = models.CharField(max_length=64, verbose_name="课程类别")
-    name = models.CharField(max_length=16, verbose_name="课程名")
+    is_banner = models.BooleanField(default=False, verbose_name="是否轮播")
+    name = models.CharField(max_length=64, verbose_name="课程名")
     description = models.CharField(max_length=32, verbose_name="课程简述")
-    detail = models.TextField(verbose_name="课程介绍")
+    # detail = UEditorField(verbose_name='课程详情',width=600, height=300, imagePath="course/Ueditor/",
+    #                       filePath="course/Ueditor/", default='')
+    detail = models.TextField(verbose_name="课程详情", default='')
     course_notice = models.TextField(verbose_name="课程须知")
     course_gain = models.TextField(verbose_name="你将学到", null=True, blank=True)
     course_tag = models.CharField(max_length=64, default='', verbose_name='课程标签')
@@ -60,6 +67,15 @@ class Course(models.Model):
     class Meta:
         verbose_name = "课程信息"
         verbose_name_plural = verbose_name
+
+
+# 轮播的课程数据表
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = "轮播课程"
+        verbose_name_plural = verbose_name
+        proxy = True
+
 
 
 class Lesson(models.Model):

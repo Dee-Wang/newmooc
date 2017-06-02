@@ -32,24 +32,30 @@
     <div class="right companycenter layout" >
             <div class="head">
                 <h1>机构教师</h1>
-                <a class="green fr more" href="org-detail-teachers.html">查看更多  >  </a>
+                <a class="green fr more" href="{% url 'teacher_list'  %}">查看更多  >  </a>
             </div>
 
             <div class="diarys">
                 {% for teacher in all_teahers %}
                 <div class="module5 share company-diary-box" style="padding:10px 0;">
                     <div class="left">
-                        <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
-                        <p>{{ teacher.name }}</p>
+                        <a href = "{% url 'teacher_detail' teacher.id %}">
+                           <img class="pic" src="{{ MEDIA_URL }}{{ teacher.image }}"/>
+                        </a>
+                        <a href = "{% url 'teacher_detail' teacher.id %}">
+                            <p>{{ teacher.name }}</p>
+                        </a>
                     </div>
                     <div class="right">
+                    {% for course in teacher.get_teacher_course %}
                         <div class="top">
                             <div class="fl">
-                                <a href=""><h1>java开发教程</h1></a>
-                                <span>发表于：2015-10-12</span>
+                                <a href="{% url 'course:course_detail' course.id %}"><h1>{{ course.name }}</h1></a>
+                                <span>发表于：{{ course.add_time }}</span>
                             </div>
                         </div>
-                        <div class="middle" style="border-bottom:0;">课程介绍</div>
+                        <div class="middle" style="border-bottom:0;">课程介绍:{{ course.description }}</div>
+                    {% endfor %}
                     </div>
                 </div>
                 {% endfor %}

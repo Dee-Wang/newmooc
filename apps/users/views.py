@@ -8,12 +8,15 @@ from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
-from .models import UserProfile, EmailVerifyRecord
+from .models import UserProfile, EmailVerifyRecord, Banner
 from course.models import Course
 from operation.models import UserCourse, UserFavor, UserMessage
+from organization.models import CourseOrg
+
 from .forms import LoginForm,RegisterForm,ForgetPwdForm, ResetPwdForm, UploadImageForm, UserChangeInfoForm, UpdatePasswpordForm
 from utils.email_send import send_email
 
@@ -42,7 +45,8 @@ class LoginView(View):
             if user is not None:
                 if user.is_active:
                     login(request, user)
-                    return render(request, "index.html")
+                    return HttpResponseRedirect(reverse('index'))
+                    # return render(request, "index.html")
                 else:
                     return render(request, "login.html", {"msg": "用户未激活"})
             else:
@@ -313,6 +317,81 @@ class UploadImageView(View):
             return HttpResponse("{'status':'fail', 'msg':'头像修改失败'}", content_type='application/json')
 
 
+# 发送邮箱验证码
+class SendEmailCodeView(View):
+    def get(self, request):
+        email = request.GET.get('email', '')
+        if UserProfile.objects.filter(email=email):
+            return HttpResponse('{"email":"邮箱已经存在"}', content_type='application/json')
+        send_email(email, "change_email")
+
+        return HttpResponse('{"status":"success"}', content_type='application/json')
+
+
+# 修改邮箱用户填写验证码之后的校验和后台处理
+class UpdateEmailView(View):
+    def post(self, request):
+        email = request.POST.get('email', '')
+        code = request.POST.get('code', '')
+        existed_records = EmailVerifyRecord.objects.filter(email=email, code=code, send_type="change_email")
+
+        # 判断是否存在这条记录，如果存在的话作出相应的修改.
+        if existed_records:
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse('{"status":"success"}', content_type='application/json')
+        else:
+            return HttpResponse('{"email":"验证码出错"}', content_type='application/json')
+
+
+# 用户修改个人信息（非头像信息）
+class ModifyPersonalInfoView(View):
+
+    def post(self, request):
+        if request.user.is_authenticated():
+            # 这里在参数中一定要加上inatance=request.user,也就是指明我是对当前用户的修改，如果没有这个参数的话，就会被默认成添加一条新的记录。
+            user_info_form = UserChangeInfoForm(request.POST, instance=request.user)
+            if user_info_form.is_valid():
+                user_info_form.save()
+                return HttpResponse("{'status':'success', 'msg':'个人信息修改成功'}", content_type='application/json')
+            else:
+                return HttpResponse(json.dumps(user_info_form.errors_), content_type='application/json')
+        else:
+            return render(request, 'login.html')
+
+
+
+# 网站首页
+class IndexView(View):
+    def get(self, request):
+        # 取出轮播图
+        all_banners = Banner.objects.all().order_by('index')
+        courses = Course.objects.filter(is_banner=False)[:6]
+        banner_course = Course.objects.filter(is_banner=True)[:5]
+        course_orgs = CourseOrg.objects.all()[:15]
+
+        return render(request, "index.html", {
+            "all_banners":all_banners,
+            "courses":courses,
+            "banner_course":banner_course,
+            "course_orgs":course_orgs,
+        })
+
+
+# 全局404错误页面的配置
+def page_not_found(request):
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response
+
+
+# 全局500错误页面的配置
+def page_error(request):
+    response = render_to_response('500.html', {})
+    response.status_code = 500
+    return response
+
 # 用户在个人信息界面修改个人密码，不用验证旧密码
 class UpdatePwdView(View):
     def post(self, request):
@@ -371,54 +450,3 @@ class UpdatePwdView(View):
 #             code = request.POST.get('code','')
 #
 #         exist_records = UserProfile.objects.filter(user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
-
-
-# 发送邮箱验证码
-class SendEmailCodeView(View):
-    def get(self, request):
-        email = request.GET.get('email', '')
-        if UserProfile.objects.filter(email=email):
-            return HttpResponse('{"email":"邮箱已经存在"}', content_type='application/json')
-        send_email(email, "change_email")
-
-        return HttpResponse('{"status":"success"}', content_type='application/json')
-
-
-# 修改邮箱用户填写验证码之后的校验和后台处理
-class UpdateEmailView(View):
-    def post(self, request):
-        email = request.POST.get('email', '')
-        code = request.POST.get('code', '')
-        existed_records = EmailVerifyRecord.objects.filter(email=email, code=code, send_type="change_email")
-
-        # 判断是否存在这条记录，如果存在的话作出相应的修改.
-        if existed_records:
-            user = request.user
-            user.email = email
-            user.save()
-            return HttpResponse('{"status":"success"}', content_type='application/json')
-        else:
-            return HttpResponse('{"email":"验证码出错"}', content_type='application/json')
-
-
-# 用户修改个人信息（非头像信息）
-class ModifyPersonalInfoView(View):
-
-    def post(self, request):
-        if request.user.is_authenticated():
-            # 这里在参数中一定要加上inatance=request.user,也就是指明我是对当前用户的修改，如果没有这个参数的话，就会被默认成添加一条新的记录。
-            user_info_form = UserChangeInfoForm(request.POST, instance=request.user)
-            if user_info_form.is_valid():
-                user_info_form.save()
-                return HttpResponse("{'status':'success', 'msg':'个人信息修改成功'}", content_type='application/json')
-            else:
-                return HttpResponse(json.dumps(user_info_form.errors_), content_type='application/json')
-        else:
-            return render(request, 'login.html')
-
-
-
-# 网站首页
-class IndexView(View):
-    def get(self, request):
-        return render(request, "index.html", {})

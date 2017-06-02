@@ -32,7 +32,9 @@ urlpatterns = [
     # 使用xadmin进行系统的后台管理
     url(r'^xadmin/', xadmin.site.urls),
 
+    # 首页URL配置
     url('^$', IndexView.as_view(), name="index"),
+
     # 使用url分块，将每一块的URL放到一块，用到的时候使用include去获取
     url(r'^users/', include('users.urls', namespace="users")),
 
@@ -53,4 +55,16 @@ urlpatterns = [
 
     # 处理静态文件的函数配置
     url(r'^media/(?P<path>.*)$', serve, {"document_root" : MEDIA_ROOT}),
+
+    # # 处理static文件的url配置
+    # url(r'^static/(?P<path>.*)$', serve, {"document_root": STATIC_ROOT}),
+
+    # 富文本相关的URL
+    url(r'^ueditor/',include('DjangoUeditor.urls' )),
 ]
+
+# 全局404错误页面的配置
+handler404 = 'users.views.page_not_found'
+
+# 全局500错误页面的配置
+handler404 = 'users.views.page_error'

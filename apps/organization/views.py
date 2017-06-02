@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from django.http import HttpResponse
+from django.http import JsonResponse
 from django.db.models import Q
+import json
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -267,9 +269,9 @@ class AdduserwantView(View):
 
         if userwant_form.is_valid():
             userwant_form.save(commit=True)
-            return HttpResponse("{'status':'success'}", content_type='application/json')
+            return HttpResponse(JsonResponse({'status':'success'}), content_type='application/json')
         else:
-            return HttpResponse("{'status':'fail', 'msg':'添加出错'}", content_type='application/json')
+            return HttpResponse(JsonResponse({'status':'fail', 'msg':'添加出错'}), content_type='application/json')
 
 
 # 用户收藏和取消用户收藏

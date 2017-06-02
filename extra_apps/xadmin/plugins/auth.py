@@ -60,13 +60,17 @@ class GroupAdmin(object):
 
 class UserAdmin(object):
     change_user_password_template = None
-    list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
-    list_filter = ('is_staff', 'is_superuser', 'is_active')
-    search_fields = ('username', 'first_name', 'last_name', 'email')
+    list_display = ('username', 'email','nickname', 'birthday', 'gender', 'address', 'phone_num', 'image',)
+    search_fields = ('username', 'email','nickname', 'birthday', 'gender', 'address', 'phone_num')
+    list_filter = ('username', 'email','nickname', 'address', 'phone_num')
+    model_icon = "fa fa-user-o"
     ordering = ('username',)
     style_fields = {'user_permissions': 'm2m_transfer'}
-    model_icon = 'fa fa-user'
+    # model_icon = 'fa fa-user'
     relfield_style = 'fk-ajax'
+    list_editable = ['nickname','image','address',]
+    readonly_fields = ['email',]
+    # exclude = ["password"]
 
     def get_field_attrs(self, db_field, **kwargs):
         attrs = super(UserAdmin, self).get_field_attrs(db_field, **kwargs)

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Q
+from django.core.urlresolvers import reverse
 
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 
@@ -103,34 +104,37 @@ class CourseDetailView(View):
 # 课程章节视频信息
 class CourseVideoView(View):
     def get(self, request, course_id):
-        # 获取当前的课程，并且每当用户点击我要学习的时候，该课程的学习人数就自己加1
-        cur_course = Course.objects.get(id=int(course_id))
-        cur_course.learning_num += 1
-        cur_course.save()
+        if request.user.is_authenticated():
+            # 获取当前的课程，并且每当用户点击我要学习的时候，该课程的学习人数就自己加1
+            cur_course = Course.objects.get(id=int(course_id))
+            cur_course.learning_num += 1
+            cur_course.save()
 
-        # 先判断当前的登录用户是否已经学习了这个课程，如果没学习的话将该课程添加到用户学习课程的数据库中
-        cur_user_course = UserCourse.objects.filter(user=request.user)
-        course_list = []
-        for user_course in cur_user_course:
-            course_list.append(user_course.course)
+            # 先判断当前的登录用户是否已经学习了这个课程，如果没学习的话将该课程添加到用户学习课程的数据库中
+            cur_user_course = UserCourse.objects.filter(user=request.user)
+            course_list = []
+            for user_course in cur_user_course:
+                course_list.append(user_course.course)
 
-        if cur_course not in course_list:
-            user_learn_course = UserCourse()
-            user_learn_course.user = request.user
-            user_learn_course.course = cur_course
-            user_learn_course.save()
+            if cur_course not in course_list:
+                user_learn_course = UserCourse()
+                user_learn_course.user = request.user
+                user_learn_course.course = cur_course
+                user_learn_course.save()
 
-        cur_course_lessons = cur_course.lesson_set.all()
+            cur_course_lessons = cur_course.lesson_set.all()
 
+            if cur_course:
+                the_teacher = cur_course.teacher
 
+            return render(request, "course-video.html", {
+                'cur_course': cur_course,
+                'cur_course_lessons': cur_course_lessons,
+            })
+        else:
+            # return render(request, "login.html", {})
+            return HttpResponseRedirect(reverse('users:login'))
 
-        if cur_course:
-            the_teacher = cur_course.teacher
-
-        return render(request, "course-video.html", {
-            'cur_course':cur_course,
-            'cur_course_lessons':cur_course_lessons,
-        })
 
 
 # 课程评论信息

@@ -30,6 +30,9 @@ SECRET_KEY = '(2a4ht7jt3-j@^p_+7$&8ao5n@9t1w^1tp&p4w*xk53(ey@x+^'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# 允许链接的所有的IP地址，*代表所有的IP都可以连
+# ALLOWED_HOSTS = ['*']
+
 ALLOWED_HOSTS = []
 
 # AUTH方法（支持邮箱登录）
@@ -55,6 +58,7 @@ INSTALLED_APPS = [
     'pure_pagination',
     'xadmin',
     'crispy_forms',
+    'DjangoUeditor',
 ]
 
 # UserProfile 覆盖了 django 内置的 user 表
@@ -162,6 +166,8 @@ DEFAULT_FROM_EMAIL = 'Peter <dee_wang@sina.com>'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 10,

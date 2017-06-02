@@ -26,20 +26,23 @@ class UserProfileAdmin(object):
     list_display = ('username', 'email','nickname', 'birthday', 'gender', 'address', 'phone_num', 'image',)
     search_fields = ('username', 'email','nickname', 'birthday', 'gender', 'address', 'phone_num')
     list_filter = ('username', 'email','nickname', 'address', 'phone_num')
+    model_icon = "fa fa-user-o"
 
 
 class EmailVerifyRecordAdmin(object):
     list_display = ('email', 'send_type', 'code')
     search_fields = ['email', 'send_type']
     list_filter = ('email', 'send_type')
+    model_icon = "fa fa-envelope-open-o"
 
 
 class BannerAdmin(object):
     list_display = ('title', 'url', 'image', 'index')
     search_fields = ('title', 'url')
     list_filter = ('title', )
+    model_icon = "fa fa-recycle"
 
-
+# xadmin.site.register(UserProfile, UserProfileAdmin)
 
 xadmin.site.register(EmailVerifyRecord, EmailVerifyRecordAdmin)
 

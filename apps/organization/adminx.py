@@ -7,18 +7,28 @@ __date__ = '17-5-24 下午2:47'
 import xadmin
 
 from .models import CourseOrg, Teacher, CityDict
+from course.models import Lesson, Video, VideoResource
+
+
+# 设置Lesson的inline
+class LessonInline(object):
+    model = Lesson
+    extra = 0
 
 
 class CourseOrgAdmin(object):
-    list_display = ( 'name','city', 'category', 'description', 'favor_num', 'click_num', 'address', 'phone_num', 'image','add_time')
+    list_display = ( 'name','city', 'category', 'description', 'favor_num', 'click_num', 'address', 'phone_num', 'image','add_time', 'get_course_nums', 'go_to')
     search_fields = ('name', 'address', 'phone_num')
     list_filter = ('city', 'category')
+    relfield_style = 'fk-ajax'
+    inlines = [LessonInline]
 
 
 class TeacherAdmin(object):
-    list_display = ('name', 'description')
+    list_display = ('name', 'characters')
     search_fields = ('name', )
     list_filter = ('name', )
+    relfield_style = 'fk-ajax'
 
 
 class CityDictAdmin(object):
