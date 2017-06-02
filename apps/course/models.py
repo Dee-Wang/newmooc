@@ -77,7 +77,7 @@ class BannerCourse(Course):
         proxy = True
 
 
-
+# 章节信息数据表
 class Lesson(models.Model):
     course = models.ForeignKey(Course, verbose_name="所属课程")
     name = models.CharField(max_length=64, verbose_name="章节名")
@@ -95,6 +95,7 @@ class Lesson(models.Model):
         verbose_name_plural = verbose_name
 
 
+# 视频信息数据表
 class Video(models.Model):
     course = models.ForeignKey(Course, verbose_name="所属课程")
     lesson = models.ForeignKey(Lesson, verbose_name="所属章节")
@@ -111,6 +112,7 @@ class Video(models.Model):
         verbose_name_plural = verbose_name
 
 
+# 视频资源信息数据表
 class VideoResource(models.Model):
     course = models.ForeignKey(Course, verbose_name="所属课程")
     name = models.CharField(max_length=16, verbose_name="资源名称")
