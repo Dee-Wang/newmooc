@@ -282,7 +282,7 @@ class AddFavView(View):
 
         if not request.user.is_authenticated():
             # 判断用户的登录状态
-            return HttpResponse('{"status":"fail", "msg":"用户未登录"}',content_type='application/json')
+            return HttpResponse(JsonResponse({"status":"fail", "msg":"用户未登录"}),content_type='application/json')
 
         exist_records = UserFavor.objects.filter(user=request.user, fav_id=int(fav_id), fav_type=int(fav_type))
 
@@ -310,7 +310,7 @@ class AddFavView(View):
                     cur_teacher.favor_num = 0
                 cur_teacher.save()
 
-            return HttpResponse('{"status":"fail", "msg":"取消收藏"}', content_type='application/json')
+            return HttpResponse(JsonResponse({"status":"fail", "msg":"取消收藏"}), content_type='application/json')
         else:
             user_fav = UserFavor()
             if int(fav_id) > 0 and int(fav_type) > 0:

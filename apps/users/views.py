@@ -6,7 +6,7 @@ from django.contrib.auth.backends import ModelBackend
 from django.db.models import Q
 from django.views.generic.base import View
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render_to_response
 
@@ -406,11 +406,11 @@ class UpdatePwdView(View):
                 user = request.user
                 user.password = make_password(password1)
                 user.save()
-                return HttpResponse("{'status':'success', 'msg':'密码修改成功'}", content_type='application/json')
+                return HttpResponse(JsonResponse({'status':'success', 'msg':'密码修改成功'}), content_type='application/json')
             else:
-                return HttpResponse("{'status':'fail', 'msg':'两次输入的密码不一致'}", content_type='application/json')
+                return HttpResponse(JsonResponse({'status':'fail', 'msg':'两次输入的密码不一致'}), content_type='application/json')
         else:
-            return HttpResponse(json.dumps(updatepwd_form.errors_), content_type='application/json')
+            return HttpResponse(JsonResponse(updatepwd_form.errors_), content_type='application/json')
 
 
 # # 用户在个人中心点击修改密码进行密码的修改，和上面忘记密码不同的是这里需要验证旧密码

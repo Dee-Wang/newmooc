@@ -87,17 +87,15 @@
                     <div id="js-pub-container" class="issques clearfix js-form">
                         <div class="wgt-ipt-wrap pub-editor-wrap " id="js-pl-input-fake">
                             <textarea id="js-pl-textarea" class="" placeholder="扯淡、吐槽、表扬、鼓励……想说啥就说啥！" ></textarea>
-                            <input type="btn btn-green" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
+{#                            <input type="btn btn-green" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">#}
                         </div>
-{#                        <input type="btn btn-green" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">#}
+                        <input type="button" id="js-pl-submit" class="pub-btn" data-cid="452" value="发表评论">
                         <p class="global-errortip js-global-error"></p>
                     </div>
                     <div id="course_note">
                         <ul class="mod-post" id="comment-list">
-
-
                             <!--评论显示格式-->
-                            {% for comment in cur_course.get_course_comments %}
+                            {% for comment in all_comments %}
                             <li class="post-row">
                                 <div class="media">
                                     <span target="_blank"><img src='{{ MEDIA_URL }}{{ comment.user.image }}' width='40' height='40' /></span>

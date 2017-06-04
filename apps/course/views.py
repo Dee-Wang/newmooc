@@ -1,6 +1,8 @@
+import json
+
 from django.shortcuts import render
 from django.views.generic.base import View
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 
@@ -141,10 +143,12 @@ class CourseVideoView(View):
 class CourseCommentView(View):
     def get(self, request, course_id):
         cur_course = Course.objects.get(id=int(course_id))
-
-
+        all_resources = VideoResource.objects.filter(course=cur_course)
+        all_comments = CourseComments.objects.filter(course=cur_course)
         return render(request, "course-comment.html", {
             'cur_course': cur_course,
+            'all_resources': all_resources,
+            'all_comments' : all_comments,
         })
 
 
@@ -153,7 +157,8 @@ class AddCourseCommentView(View):
     def post(self, request):
         if not request.user.is_authenticated():
             # 判断用户的登录状态
-            return HttpResponse('{"status":"fail", "msg":"用户未登录"}',content_type='application/json')
+            return HttpResponse(JsonResponse({"status":"fail", "msg":"用户未登录"}),content_type='application/json')
+            # return HttpResponseRedirect(reverse('users:login'))
         else:
             course_id = int(request.POST.get('course_id', 0))
             comments = request.POST.get('comments', '')
@@ -163,8 +168,8 @@ class AddCourseCommentView(View):
                 course_comments.comments = comments
                 course_comments.user = request.user
                 course_comments.save()
-                return HttpResponse("{'status':'success', 'msg':'添加成功'}", content_type='application/json')
+                return HttpResponse(JsonResponse({'status':'success', 'msg':'添加成功'}), content_type='application/json')
             else:
-                return HttpResponse("{'status':'fail', 'msg':'添加出错'}", content_type='application/json')
+                return HttpResponse(JsonResponse({'status':'fail', 'msg':'添加出错'}), content_type='application/json')
 
 
