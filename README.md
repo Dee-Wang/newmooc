@@ -8,14 +8,36 @@
 ### 环境简介：
 #### 开发环境：Ubuntu16.04 LTS + Virtualenv
 #### 开发语言：Python3.5
-#### 使用框架：Django
+#### 使用框架：Django1.9
 #### 前端页面：在网上找的
 #### 后台管理：xadmin
-#### 服务器：Nginx+Gunicorn
 #### 数据库：MySQL
 
 ---
 ### 使用方法
+1. 下载virtualenv
+```
+sudo apt-get install virtualenv
+```
+2. 创建一个虚拟环境(这里是基于python3)
+```
+virtualenv mymoocvenv --python=python3
+```
+3. 进入虚拟环境(在虚拟环境所在的目录下)
+```
+source mymoocvenv/bin/activate
+```
+4. 在虚拟环境中安装pip(这里基于Python3)
+```
+sudo apt-get install python3-pip
+```
+4. 在虚拟环境中安装一些列的安装包
+```
+# 安装Django(1,9版本)
+pip3 install django==1.9
+# ...
+```
+
 
 
 
