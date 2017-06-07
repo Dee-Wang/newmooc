@@ -41,8 +41,13 @@ class Course(models.Model):
         return self.lesson_set.all().count()
 
     # 获取学习该课程的学员信息，这里可以设置获取的数量
-    def get_learn_users(self):
-        return self.usercourse_set.all()[:5]
+    # 但是在这里计算的话效率比较低，因为每次进入课程详情页面都得遍历计算一次
+    # def get_learn_users(self):
+    #     return self.usercourse_set.all()[:5]
+
+    # # 获取当前课程的学习人数
+    # def get_learning_num(self):
+    #     return self.usercourse_set.all().count()
 
     # 获取学习当前的课程的人还在学习的其他的课程
     def get_curcourseuser_othercourse(self):

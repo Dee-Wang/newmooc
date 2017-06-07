@@ -44,8 +44,9 @@ class OrgView(View):
         if sort:
             if sort == 'students':
                 all_orgs = all_orgs.order_by("-students")
-            elif sort == 'courses':
-                all_orgs = all_orgs.order_by("-course_nums")
+            # elif sort == 'courses':
+            #     all_orgs = all_orgs.order_by("-get_course_nums")
+
             elif sort == 'favors':
                 all_orgs = all_orgs.order_by("-favor_num")
             elif sort == 'popularity':

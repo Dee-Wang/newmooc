@@ -49,7 +49,7 @@
 				<ul class="tab_header">
 					<li class="{% ifequal sort '' %}active{% endifequal %}"><a href="?ct={{ category }}&city={{ city.id }}">全部</a> </li>
 					<li class="{% ifequal sort 'students' %}active{% endifequal %}"><a href="?sort=students&ct={{ category }}&city={{ city.id }}">学习人数 &#8595;</a></li>
-					<li class="{% ifequal sort 'courses' %}active{% endifequal %}"><a href="?sort=courses&ct={{ category }}&city={{ city.id }}">课程数 &#8595;</a></li>
+{#					<li class="{% ifequal sort 'courses' %}active{% endifequal %}"><a href="?sort=courses&ct={{ category }}&city={{ city.id }}">课程数 &#8595;</a></li>#}
                     <li class="{% ifequal sort 'favors' %}active{% endifequal %}"><a href="?sort=favors&ct={{ category }}&city={{ city.id }}">收藏人数 &#8595;</a></li>
                     <li class="{% ifequal sort 'popularity' %}active{% endifequal %}"><a href="?sort=popularity&ct={{ category }}&city={{ city.id }}">人气值 &#8595;</a></li>
 				</ul>
@@ -87,7 +87,7 @@
                             </li>
                         </ul>
                     </dd>
-                    <div class="buy start_groupbuy jsShowPerfect2" data-id="22"><br/>联系<br/>服务</div>
+                    <div class="buy start_groupbuy jsShowPerfect2" data-id="22"><a href="{% url 'org:org_home' course_org.id %}"><br/>联系<br/>服务</a></div>
                 </dl>
             {% endfor %}
         <!--分页器-->
@@ -148,7 +148,7 @@
                 <dl class="des">
                     <dt class="num fl">{{ forloop.counter }}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>{{ curent_org.name }}</h1></a>
+                        <a href="{% url 'org:org_home' curent_org.id %}"><h1>{{ curent_org.name }}</h1></a>
                         <p>{{ curent_org.address }}</p>
                     </dd>
                 </dl>

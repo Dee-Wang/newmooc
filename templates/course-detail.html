@@ -13,26 +13,6 @@
         </div>
     </section>
 {% endblock %}
-{#{% block active_title %}#}
-{#     <nav>#}
-{#				<div class="nav">#}
-{#					<div class="wp">#}
-{#						<ul>#}
-{#							<li ><a href="{% url 'index' %}">首页</a></li>#}
-{#							<li class="active" >#}
-{#								<a href="{% url 'course:course_list' %}">#}
-{#									公开课<img class="hot" src="{% static 'images/nav_hot.png' %}">#}
-{#								</a>#}
-{#							</li>#}
-{#							<li >#}
-{#								<a href="{% url 'teacher_list' %}">授课教师</a>#}
-{#							</li>#}
-{#							<li ><a href="{% url 'org:org_list' %}">授课机构</a></li>#}
-{#						</ul>#}
-{#					</div>#}
-{#				</div>#}
-{#			</nav>#}
-{#{% endblock %}#}
 {% block content %}
     <section>
 	    <div class="wp">
@@ -86,10 +66,6 @@
 					<a href="{% url 'org:org_home' course.course_org.id %}">
                         <h2 class="center" title="{{ course.course_org.name }}">{{ course.course_org.name }}</h2>
                     </a>
-{#					<div class="btn  notlogin#}
-{#					     "data-favid="14" id="jsRightBtn">#}
-{#                         {% if has_org_fav %}已收藏{% else %}收藏{% endif %}#}
-{#                    </div>#}
                     <div class="btn" id="jsRightBtn">{% if has_org_fav %}已收藏{% else %}收藏{% endif %}</div>
 					<div class="clear">
 						<ul>
