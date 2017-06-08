@@ -12,6 +12,7 @@
     {% block custom_css %}{% endblock %}
     <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/jquery-migrate-1.2.1.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/video.min.js' %}"></script>
 </head>
 <body>
 <meta charset="UTF-8">
@@ -105,15 +106,14 @@
     </section>
 {% endblock %}
 
-{% block content %}
-{% endblock %}
+{% block content %}{% endblock %}
 {% block left_content %}{% endblock %}
 {% block right_content %}{% endblock %}
 <footer>
 		<div class="footer">
 			<div class="wp">
 				<ul class="cont">
-					<li class="logo"><a href=""><img src="{% static 'images/footlogo.png' %}"/></a></li>
+					<li class="logo"><a href="{% url 'index' %}"><img src="{% static 'images/footlogo.png' %}"/></a></li>
 					<li class="code"><img src="{% static 'images/code.jpg' %}"/><p class="center">扫描关注微信</p></li>
 					<li class="third"><img class="fl" src="{% static 'images/tell.png' %}"/><p class="tell">33333333</p><p class="time">周一至周日 9:00-18:00</p></li>
 				</ul>
@@ -125,7 +125,7 @@
                 <span class="fr">copyright ? 2016 ICP备案证书号：蜀ICP备xxxxx号-1</span>
 			</div>
 		</div>
-	</footer>
+</footer>
 
 <section>
     <ul class="sidebar">

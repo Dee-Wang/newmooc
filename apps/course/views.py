@@ -204,5 +204,52 @@ class AddCourseCommentView(View):
                 return HttpResponse(JsonResponse({'status':'fail', 'msg':'添加出错'}), content_type='application/json')
 
 
-# # 课程播放
-# class Course
+# 课程播放
+class CourseVideoPlayView(LoginRequiredMixin, View):
+    """视频播放页面"""
+    def get(self, request, video_id):
+        # 获取当前的课程，并且每当用户点击我要学习的时候，该课程的学习人数就自己加1
+        cur_video = Video.objects.get(id=int(video_id))
+        cur_course = cur_video.course
+
+        # 先判断当前的登录用户是否已经学习了这个课程，如果没学习的话将该课程添加到用户学习课程的数据库中
+        cur_user_course = UserCourse.objects.filter(user=request.user)
+        course_list = []
+        for user_course in cur_user_course:
+            course_list.append(user_course.course)
+
+        if cur_course not in course_list:
+            user_learn_course = UserCourse()
+            user_learn_course.user = request.user
+            user_learn_course.course = cur_course
+            user_learn_course.save()
+            # 在视图函数中计算效率更高，因为只是进行一次计算，而在models中每次获取学习人数的时候都要遍历一遍，获得学习的人数
+            cur_course.learning_num += 1
+            cur_course.save()
+
+        cur_lesson = cur_video.lesson
+
+        if cur_course:
+            the_teacher = cur_course.teacher
+
+        # 获取学习当前课程的用户还学习了的课程
+        user_courses = UserCourse.objects.filter(course=cur_course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        # # 接下来我们会根据得到的用户的id获取所有的学习该课程的用户并且获取这些用户对应的所有的课程，存储成一个列表的形式，我们取出列表的前三个元素，
+        # # 并且使用集合将列表中的重复的的元素过滤掉，发送给前端文件一个可迭代的集合了性的对象
+        # all_learned_courses = [all_user_other_courses.course for all_user_other_courses in all_user_courses]
+        # # other_courses = set(all_learned_courses.filter(id!=cur_course.id)[:5])
+        # other_courses = set(all_learned_courses[:3])
+
+        # 还有一种方法,先获取所有的课程的id
+        course_ids = [user_course.course.id for user_course in all_user_courses]
+        # 根据课程的id获取所有的课程
+        related_courses = set(Course.objects.filter(id__in=course_ids).order_by("-click_num")[:3])
+
+        return render(request, "course-play.html", {
+            'video':cur_video,
+            'course': cur_course,
+            'lesson': cur_lesson,
+            'relate_courses': related_courses,
+        })
