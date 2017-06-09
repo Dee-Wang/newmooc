@@ -28,10 +28,10 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 SECRET_KEY = '(2a4ht7jt3-j@^p_+7$&8ao5n@9t1w^1tp&p4w*xk53(ey@x+^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # 允许链接的所有的IP地址，*代表所有的IP都可以连
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 ALLOWED_HOSTS = []
 
@@ -152,9 +152,9 @@ USE_TZ = False # 数据库取得是本地的时间，而不是UTC
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )
 
 # 发送邮件的相关的配置
 EMAIL_HOST = 'smtp.sina.com'
@@ -164,10 +164,11 @@ EMAIL_HOST_PASSWORD = 'walm0009'
 EMAIL_USE_TSL = False
 DEFAULT_FROM_EMAIL = 'Peter <dee_wang@sina.com>'
 
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 10,
