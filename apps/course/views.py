@@ -204,7 +204,7 @@ class AddCourseCommentView(View):
                 return HttpResponse(JsonResponse({'status':'fail', 'msg':'添加出错'}), content_type='application/json')
 
 
-# 课程播放
+# 课程视频播放
 class CourseVideoPlayView(LoginRequiredMixin, View):
     """视频播放页面"""
     def get(self, request, video_id):
